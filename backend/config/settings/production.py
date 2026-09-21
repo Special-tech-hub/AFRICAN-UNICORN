@@ -7,7 +7,10 @@ env = environ.Env()
 
 DEBUG = False
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = list({
+    *env.list('ALLOWED_HOSTS', default=[]),
+    'african-unicorn.onrender.com',
+})
 
 # Security settings
 SECURE_SSL_REDIRECT = True
