@@ -12,6 +12,11 @@ ALLOWED_HOSTS = list({
     'african-unicorn.onrender.com',
 })
 
+CORS_ALLOWED_ORIGINS = list({
+    *env.list('CORS_ALLOWED_ORIGINS', default=[]),
+    'https://african-unicorn.vercel.app',
+})
+
 # Security settings
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 31536000
