@@ -2,7 +2,6 @@
 Serializers for accounts app: Registration, OTP, Login.
 """
 import re
-from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import User, normalize_phone_number, phone_number_variants
 from .services import OTPService
@@ -83,13 +82,15 @@ class LoginSerializer(serializers.Serializer):
         phone_number = attrs.get('phone_number')
         password = attrs.get('password')
 
-        user = authenticate(username=phone_number, password=password)
-        if user is None:
-            for candidate in phone_number_variants(phone_number):
-                user = authenticate(username=candidate, password=password)
-                if user is not None:
-                    attrs['user'] = user
-                    return attrs
+        user = None
+        for candidate in phone_number_variants(phone_number):
+            try:
+                candidate_user = User.objects.get(phone_number=candidate)
+            except User.DoesNotExist:
+                continue
+            if candidate_user.check_password(password):
+                user = candidate_user
+                break
 
         if user is None:
             raise serializers.ValidationError(

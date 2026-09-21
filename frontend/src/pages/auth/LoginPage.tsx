@@ -31,8 +31,18 @@ export default function LoginPage() {
         navigate('/onboarding/personal')
       }
     } catch (err: unknown) {
-      const e = err as { response?: { data?: { message?: string } } }
-      setServerError(e.response?.data?.message || 'Invalid phone number or password.')
+      const e = err as {
+        response?: {
+          data?: {
+            message?: string
+            details?: { non_field_errors?: string[] }
+          }
+        }
+      }
+      const message = e.response?.data?.message
+        || e.response?.data?.details?.non_field_errors?.[0]
+        || 'Unable to connect to the server. Please try again.'
+      setServerError(message)
     }
   }
 

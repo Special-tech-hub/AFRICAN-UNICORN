@@ -15,6 +15,7 @@ ALLOWED_HOSTS = list({
 CORS_ALLOWED_ORIGINS = list({
     *env.list('CORS_ALLOWED_ORIGINS', default=[]),
     'https://african-unicorn.vercel.app',
+    'https://african-unicorn-mvdyxrumt-special-tech-hubs-projects.vercel.app',
 })
 
 # Security settings
